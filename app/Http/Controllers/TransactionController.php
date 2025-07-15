@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreTransactionRequest;
+use App\Http\Requests\UpdateTransactionRequest;
+
+//models
+use App\Models\Transaction;
+
+class TransactionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreTransactionRequest $request)
+    {
+        Transaction::create($request->all());
+
+        return redirect()->back();
+
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Transaction $transaction)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Transaction $transaction)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
+    {   
+        \Log::info('Transaction update payload:', $request->all());
+    
+        $transaction->update(
+            $request->only(
+                'description',
+                'amount',
+                'in_category_id'
+            )
+        );
+    
+        return redirect()->back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Transaction $transaction)
+    {
+        $budget_id = $transaction->in_budget_id; // <-- this is the correct way
+        $transaction->delete();
+
+        return redirect()->route('budget.show', $budget_id, 303);
+    }
+
+    //Custom functions
+    public function getTransactionsByBudgetId($budgetId) {
+        return $transactions = Transaction::where('in_budget_id', $budgetId)->with('category', 'budget')->get();
+    }
+}

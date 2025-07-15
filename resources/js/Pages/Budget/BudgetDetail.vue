@@ -1,0 +1,194 @@
+<template>
+<div class="max-w-8/10 mx-auto pt-[50px]">
+  <Link
+    class="flex items-center text-gray-500 cursor-pointer hover:bg-blue-700 hover:text-white py-3 ps-5 pe-6 rounded-md w-fit"
+    href="/tracker"
+  >
+    <chevron-left
+      class="stroke-gray-500 hover:stroke-white"
+      width="14px"
+      height="14px"
+    />
+    Go back
+  </Link>
+
+  <span class="text-center text-xs mt-5 mb-3 block text-gray-500">Budget detail</span>
+  <div class="mb-14 flex  justify-center">
+    <h2 class="text-5xl ">{{budget?.name}}</h2>
+    <edit
+      @click="makeModalVisible('changeName')"
+      width="12px"
+      height="12px"
+      class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
+    />
+  </div>
+
+  <div class="flex items-center justify-between mb-12">
+    <div>
+      <span class="text-center text-xl">Current balance: </span>&nbsp;
+      <span class="text-center text-2xl font-bold">${{ budgetLeft }}</span>
+      <br/>
+
+      <div class="text-sm mt-4 flex items-center">
+        <span class="text-sm me-2"> remaining from initial budget of </span>
+        <span 
+          class="text-md font-semibold"
+          :class="{
+            'text-green-800': budget.budget_amount > 0,
+            'text-red-500': budget.budget_amount <= 0
+          }"
+        > 
+          ${{ budget.budget_amount }} 
+        </span>
+        <edit
+          @click="makeModalVisible('changeAmount')"
+          width="12px"
+          height="12px"
+          class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
+        />
+      </div>
+    </div>
+    <div class="flex items-center">
+
+      <span 
+        @click="handleDeleteBudget"
+        class="text-gray-500 hover:text-red-500 hover:underline cursor-pointer ms-2"
+      >
+        Delete Budget
+      </span>
+    </div>
+
+  </div>
+
+  <!-- Transactions -->
+  <div class="">
+    <transaction
+      v-for="transaction in transactions"
+      :key="transaction.id"
+      :transaction="transaction"
+    />
+  </div>
+
+  <div class="flex justify-end mt-6 mb-6">
+    <CommonButton
+      @click="makeModalVisible('AddTransaction')"
+      label="Add a transaction"
+    />
+  </div>
+</div>
+
+<!-- modals -->
+ <transaction-add-modal
+  v-if="activeModal === 'AddTransaction'"
+  @close-modal="resetModal"
+  :budget_id="budget.id"
+  :categories="categories"
+/>
+
+<budget-modify-modal
+  v-if="activeModal === 'changeName'"
+  @close-modal="resetModal"
+  @change-request="handleNameChange"
+  input-label="New budget name"
+  input-name="budgetName"
+/>
+
+<budget-modify-modal
+  v-if="activeModal === 'changeAmount'"
+  @close-modal="resetModal"
+  @change-request="handleAmountChange"
+  input-label="New budget amount"
+  input-name="budgetAmount"
+/>
+</template>
+
+
+<script setup>
+//vue
+import { computed, reactive, ref } from 'vue';
+
+//inertia
+import { router, Link } from '@inertiajs/vue3'
+
+//components
+import CommonButton from '../Common/Button.vue';
+import BudgetModifyModal from './ModifyModal.vue';
+import Transaction from '../Transaction/Index.vue';
+import TransactionAddModal from '../Transaction/AddModal.vue';
+
+//svg
+import ChevronLeft from '../../../../public/Icons/chevron-left.svg';
+import Edit from '../../../../public/Icons/edit.svg';
+
+const props = defineProps({
+  budget: {
+    type: Object,
+    required: true
+  },
+
+  categories: {
+    type:Array,
+    required:true
+  },
+
+  transactions: {
+    type:Array,
+    required:true
+  }
+})
+
+//Modal state
+const activeModal = ref(null);
+
+//Form values
+const form = reactive(
+  {
+    newName: null,
+    newAmount: null
+  }
+)
+
+//computed
+const budgetLeft = computed(() => {
+  const spent = props.transactions.reduce((acc, t) => acc + Number(t.amount), 0);
+  return Number.parseFloat((Number(props.budget.budget_amount) + spent)).toFixed(2);
+});
+
+//helpers
+const handleDeleteBudget = () => {
+  router.delete(`/budget/${props.budget.id}`)
+  console.log('delete')
+}
+
+const handleNameChange = (newValue) => {
+  const { created_at, updated_at, ...newBudget } = props.budget;
+  newBudget.name = newValue;
+
+  router.put(`/budget/${props.budget.id}`, newBudget, {
+    onError: (errors) => {
+      // handle validation or server errors here
+      console.error(errors);
+    }
+  });
+
+  resetModal()
+}
+
+const handleAmountChange = (newValue) => {
+  console.log('changing budget')
+  const payload = {
+    amount : newValue
+  }
+  
+  router.put(`/budget/${props.budget.id}`, payload)
+  resetModal()
+}
+
+const makeModalVisible = (modalName) => {
+  activeModal.value = modalName
+}
+
+const resetModal = () => {
+  activeModal.value = null;
+}
+</script>
