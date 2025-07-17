@@ -29,11 +29,13 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTransactionRequest $request)
+    public function store(Request $request)
     {
         Transaction::create($request->all());
 
-        return redirect()->back();
+        return redirect()
+                ->back()
+                ->with('success', 'Transaction created');
 
     }
 
