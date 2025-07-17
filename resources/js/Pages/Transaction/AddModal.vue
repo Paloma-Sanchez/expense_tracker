@@ -5,7 +5,9 @@
   <div
     class="w-full max-w-[7/10] mx-auto relative bg-white rounded-lg shadow-sm dark:bg-white py-12 px-20"
   >
-    <form>
+    <form
+      @submit.prevent="handleAddTransaction"
+    >
       <h4 class="text-center text-3xl mb-10"> Add a new transaction</h4>
 
       <common-input
@@ -53,6 +55,7 @@
           Budget
         </label>
         <select 
+          v-model="newTransactionForm.in_budget_id"
           v-if="!budget_id"
           class="border w-full h-[40px] rounded-lg mt-3 mb-8 ps-3"
           name="amount"
@@ -60,7 +63,7 @@
           <option 
             v-for="budget in budgets"
             :key="budget.id"
-            value="budget.id"
+            :value="budget.id"
           >
             {{ budget.name }}
           </option>
@@ -72,17 +75,18 @@
         class="flex justify-end"
       >
         <common-button
-          @click.prevent="handleCancel"
+          @click="handleCancel"
           class="me-3"
           label="Cancel"
         />
         <common-button
-          @click.prevent="handleAddTransaction"
           label="Add transaction"
+          type="submit"
         />
       </div>
     </form>
   </div>
+  <pre>{{newTransactionForm}}</pre>
 </common-modal-container>
 </template>
 
@@ -92,7 +96,7 @@
 import { reactive } from 'vue';
 
 //inertia
-import { router } from '@inertiajs/vue3'
+import { router, useForm, usePage } from '@inertiajs/vue3'
 
 //components
 import CommonButton from '../Common/Button.vue';
@@ -108,15 +112,11 @@ const props = defineProps({
   budgets: {
     type: Array,
     default: () => [],
+  },
 
-    validator(value) {
-      // Only validate if budget_id is null
-      if (this && this.budget_id !== null){
-        return true
-      };
-      
-      return Array.isArray(value) && value.length > 0;
-    }
+  ownerId: {
+    type: Number,
+    required: true
   },
 
   categories: {
@@ -125,11 +125,12 @@ const props = defineProps({
   }
 })
 
-const newTransactionForm = reactive({
+const newTransactionForm = useForm({
   description: '',
-  amount: 0,
+  amount: null,
   in_category_id: 1,  
-  in_budget_id: props.budget_id ? props.budget_id : 1,
+  in_budget_id: props.budget_id ?? (props.budgets[0]?.id ?? 1),
+  owner_id: props.ownerId
 }); 
 
 //emits
@@ -141,6 +142,20 @@ const handleCancel = () => {
 }
 
 const handleAddTransaction = () => {
-  router.post('/transaction', newTransactionForm)
+  newTransactionForm.post('/transaction', {
+    errorBag: 'crateTransaction',
+    onSuccess: () => emit('closeModal'),
+    preserveState: true,
+    preserveScroll: true,
+    preserveComponentState: true,
+    only:[
+      'errors'
+    ],
+    onError: () => {
+      // Keep the modal open on error
+      // Optionally, set activeModal.value = 'AddTransaction' here if needed
+      console.log('error')
+    }
+  })
 }
 </script>
