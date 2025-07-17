@@ -11,7 +11,7 @@ class Transaction extends Model
     /** @use HasFactory<\Database\Factories\TransactionFactory> */
     use HasFactory;
 
-    protected $fillable =  ['description', 'amount', 'in_category_id'];
+    protected $fillable =  ['description', 'amount', 'in_category_id', 'in_budget_id', 'owner_id'];
 
     public function budget():BelongsTo {
         return(
