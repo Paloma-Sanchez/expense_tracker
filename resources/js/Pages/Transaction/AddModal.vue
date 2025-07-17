@@ -142,20 +142,6 @@ const handleCancel = () => {
 }
 
 const handleAddTransaction = () => {
-  newTransactionForm.post('/transaction', {
-    errorBag: 'crateTransaction',
-    onSuccess: () => emit('closeModal'),
-    preserveState: true,
-    preserveScroll: true,
-    preserveComponentState: true,
-    only:[
-      'errors'
-    ],
-    onError: () => {
-      // Keep the modal open on error
-      // Optionally, set activeModal.value = 'AddTransaction' here if needed
-      console.log('error')
-    }
-  })
+  newTransactionForm.post('/transaction')
 }
 </script>

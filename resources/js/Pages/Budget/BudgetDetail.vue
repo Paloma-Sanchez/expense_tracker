@@ -77,7 +77,7 @@
   </div>
 </div>
 <pre>{{flash? flash : page.props.flash}}</pre>
-<pre>{{page.props}}</pre>
+<pre>{{Object.keys(page.props)}}</pre>
 
 <!-- modals -->
  <transaction-add-modal
