@@ -5,7 +5,9 @@
   <div
     class="w-full max-w-[7/10] mx-auto relative bg-white rounded-lg shadow-sm dark:bg-white py-12 px-20"
   >
-    <form>
+    <form
+      @submit.prevent="handleChange"
+    >
       <common-input
         v-model="updatedValue"
         :name="inputName"
@@ -18,13 +20,13 @@
         class="flex justify-end"
       >
         <common-button
-          @click.prevent="handleCancel"
+          @click="handleCancel"
           class="me-3"
           label="Cancel"
         />
         <common-button
-          @click.prevent="handleChange"
           label="Change"
+          tyoe="submit"
         />
       </div>
     </form>

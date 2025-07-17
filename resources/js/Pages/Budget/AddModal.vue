@@ -5,7 +5,9 @@
   <div
     class="w-full max-w-[7/10] mx-auto relative bg-white rounded-lg shadow-sm dark:bg-white py-12 px-20"
   >
-    <form>
+    <form
+      @submit.prevent="handleAddBudget"
+    >
       <h4 class="text-center text-3xl mb-10"> Create a new budget</h4>
 
       <common-input
@@ -27,14 +29,14 @@
         class="flex justify-end"
       >
         <common-button
-          @click.prevent="handleCancel"
+          @click="handleCancel"
           class="me-3"
           label="Cancel"
         />
 
         <common-button
-          @click.prevent="handleAddBudget"
           label="Add budget"
+          type="submit"
         />
       </div>
     </form>
@@ -57,7 +59,7 @@ import CommonModalContainer from '../Common/ModalContainer.vue';
 
 const newBudgetForm = reactive({
   name: '',
-  amount: 0,
+  budget_amount: 0,
   by_user_id: 1
 }); 
 
