@@ -12,8 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        HandleInertiaRequests::class;
+        // $middleware->append(StartSession::class);
+        // $middleware->append(ShareErrorsFromSession::class);
+        $middleware->append(HandleInertiaRequests::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
+
