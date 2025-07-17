@@ -14,6 +14,7 @@ class TrackerController extends Controller
 {
     protected $transactionService;
     protected $budgetService;
+    protected $categoryController;
 
     public function __construct(TransactionService $transactionService, BudgetService $budgetService, CategoryController $categoryController) 
     {

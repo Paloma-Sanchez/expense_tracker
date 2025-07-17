@@ -4,7 +4,7 @@
     :href="`/budget/${budget.id}`"
   >
     <h4 class="font-semibold text-xl"> {{ budget.name }} </h4>
-    <span> {{ (budget.amount) }} </span>
+    <span> {{ (budget.budget_amount) }} </span>
   </Link>
 </div>
 </template>
