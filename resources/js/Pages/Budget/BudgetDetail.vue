@@ -76,6 +76,8 @@
     />
   </div>
 </div>
+<pre>{{flash? flash : page.props.flash}}</pre>
+<pre>{{page.props}}</pre>
 
 <!-- modals -->
  <transaction-add-modal
@@ -83,6 +85,7 @@
   @close-modal="resetModal"
   :budget_id="budget.id"
   :categories="categories"
+  :ownerId="budget.by_user_id"
 />
 
 <budget-modify-modal
@@ -108,7 +111,7 @@
 import { computed, reactive, ref } from 'vue';
 
 //inertia
-import { router, Link } from '@inertiajs/vue3'
+import { router, Link, usePage } from '@inertiajs/vue3'
 
 //components
 import CommonButton from '../Common/Button.vue';
@@ -137,16 +140,12 @@ const props = defineProps({
   }
 })
 
+const page = usePage()
+
+const flash = computed(() => page.props.flash?.success)
+
 //Modal state
 const activeModal = ref(null);
-
-//Form values
-const form = reactive(
-  {
-    newName: null,
-    newAmount: null
-  }
-)
 
 //computed
 const budgetLeft = computed(() => {
@@ -172,6 +171,7 @@ const handleNameChange = (newValue) => {
   });
 
   resetModal()
+  console.log('reset')
 }
 
 const handleAmountChange = (newValue) => {
