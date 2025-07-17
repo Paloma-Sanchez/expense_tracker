@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
+use Illuminate\Http\Request;
 
 //models
 use App\Models\Transaction;
@@ -31,11 +32,18 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        Transaction::create($request->all());
+        \Log::info('Requeste', $request->all());
+
+        $validated = $request->validate([
+            'amount' => 'required|decimal:2|max:1000000|min:-1000000',
+            'description' => 'required|string|min:1|max:100',
+        ]);
+
+        Transaction::create($validated);
 
         return redirect()
-                ->back()
-                ->with('success', 'Transaction created');
+            ->back()
+            ->with('success', 'Transaction created');
 
     }
 

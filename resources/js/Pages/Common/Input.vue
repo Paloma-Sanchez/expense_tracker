@@ -1,5 +1,7 @@
 <template>
-<div>
+<div
+  class="mb-8 "
+>
   <label 
     :for="name"
     class="text-xl"
@@ -7,13 +9,21 @@
     {{ label }}
   </label>
   <br/>
+
   <input 
     v-model="inputValue"
     :name="name" 
     :type="type"
-    class="border w-full h-[40px] rounded-lg mt-3 mb-8 ps-3"
+    class="border w-full h-[40px] rounded-lg mt-3 ps-3"
     ref="input-instance" 
   />
+
+  <span
+    v-if="error"
+    class="text-red-700 text-sm mt-2 block"
+  >
+    {{ error }}
+  </span>
 </div>
 </template>
 
@@ -21,6 +31,11 @@
 import { onMounted, useTemplateRef } from 'vue'
 
 const props = defineProps({
+  error: {
+    type: String,
+    default: ''
+  },
+
   focused: {
     type: Boolean,
     default: false

@@ -61,7 +61,7 @@
   </div>
 
   <!-- Transactions -->
-  <div class="">
+  <div class="max-h-[400px] h-full overflow-scroll">
     <transaction
       v-for="transaction in transactions"
       :key="transaction.id"
@@ -76,8 +76,10 @@
     />
   </div>
 </div>
+<pre>{{activeModal}}</pre>
+<pre>{{showAlert}}</pre>
 <pre>{{flash? flash : page.props.flash}}</pre>
-<pre>{{Object.keys(page.props)}}</pre>
+<pre>{{page.props.errors}}</pre>
 
 <!-- modals -->
  <transaction-add-modal
@@ -103,17 +105,27 @@
   input-label="New budget amount"
   input-name="budgetAmount"
 />
+
+<!-- alert -->
+<common-alert
+  v-if="showAlert"
+  @show="activateAlert"
+  @close="deactivateAlert"
+  :description="flash"
+  label="Success!"
+/>
 </template>
 
 
 <script setup>
 //vue
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 //inertia
 import { router, Link, usePage } from '@inertiajs/vue3'
 
 //components
+import CommonAlert from '../Common/Alert.vue';
 import CommonButton from '../Common/Button.vue';
 import BudgetModifyModal from './ModifyModal.vue';
 import Transaction from '../Transaction/Index.vue';
@@ -142,10 +154,11 @@ const props = defineProps({
 
 const page = usePage()
 
-const flash = computed(() => page.props.flash?.success)
+const flash = computed(() => page.props.flash.success)
 
 //Modal state
 const activeModal = ref(null);
+const showAlert=ref(null);
 
 //computed
 const budgetLeft = computed(() => {
@@ -153,10 +166,16 @@ const budgetLeft = computed(() => {
   return Number.parseFloat((Number(props.budget.budget_amount) + spent)).toFixed(2);
 });
 
+//watch
+watch(flash, (newFlash) => {
+  if(newFlash){
+    activateAlert()
+  }
+})
+
 //helpers
 const handleDeleteBudget = () => {
   router.delete(`/budget/${props.budget.id}`)
-  console.log('delete')
 }
 
 const handleNameChange = (newValue) => {
@@ -165,13 +184,11 @@ const handleNameChange = (newValue) => {
 
   router.put(`/budget/${props.budget.id}`, newBudget, {
     onError: (errors) => {
-      // handle validation or server errors here
       console.error(errors);
     }
   });
 
   resetModal()
-  console.log('reset')
 }
 
 const handleAmountChange = (newValue) => {
@@ -190,5 +207,20 @@ const makeModalVisible = (modalName) => {
 
 const resetModal = () => {
   activeModal.value = null;
+}
+
+const activateAlert = () => {
+  console.log('activate')
+  if(showAlert.value) {
+    deactivateAlert()
+
+    setTimeout(() => showAlert.value = true, 1000)
+  } else {
+    showAlert.value = true
+  }
+}
+
+const deactivateAlert = () => {
+  showAlert.value = false
 }
 </script>

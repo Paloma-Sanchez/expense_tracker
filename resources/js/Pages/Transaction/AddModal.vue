@@ -12,6 +12,7 @@
 
       <common-input
         v-model="newTransactionForm.description"
+        :error="newTransactionForm.errors.description"
         name="description"
         label="Description"
         focused
@@ -19,6 +20,7 @@
 
       <common-input
         v-model="newTransactionForm.amount"
+        :error="newTransactionForm.errors.amount"
         name="amount"
         label="Amount"
         type="number"

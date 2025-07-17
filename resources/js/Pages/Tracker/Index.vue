@@ -1,6 +1,15 @@
 <template>
 <div class="max-w-8/10 mx-auto pt-[50px]">
-  <h2 class="text-center text-5xl mb-14  ">Hello! </h2>
+  <Link
+    class="flex items-center text-gray-500 cursor-pointer hover:bg-blue-700 hover:text-white py-3 ps-5 pe-6 rounded-md w-fit"
+    href="/logout"
+    method="delete"
+    as="button"
+  >
+    Sign out
+  </Link>
+
+  <h2 class="text-center text-5xl mb-14  ">Hello {{ user.name }}!</h2>
 
   <!-- BUDGETS -->
   <div class="mb-8">
@@ -36,7 +45,7 @@
       />
     </div>
   </div>
-  <pre>{{ budgetNames }}</pre>
+  <pre>{{ user }}</pre>
 </div>
 
 <!-- Modals -->
@@ -60,12 +69,16 @@ import { format, parseISO } from 'date-fns';
 // vue
 import { computed, ref } from 'vue';
 
+//inertia
+import { Link } from '@inertiajs/vue3';
+
 //components
 import BudgetAddModal from '../Budget/AddModal.vue';
 import BudgetPreviewList from '../Budget/BudgetPreviewList.vue';
 import CommonButton from '../Common/Button.vue';
 import Transaction from '../Transaction/Index.vue';
 import TransactionAddModal from '../Transaction/AddModal.vue';
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
   budgets: {
@@ -84,7 +97,13 @@ const props = defineProps({
   }
 })
 
-const openModal = ref(null);
+const openModal = ref(null)
+
+const page = usePage()
+
+const user = computed(() => {
+  return page.props.flash.user
+})
 
 //computed
 const budgetNames = computed(() => {
