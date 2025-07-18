@@ -98,30 +98,4 @@ class TransactionController extends Controller
 
         return redirect()->route('budget.show', $budget_id, 303);
     }
-
-    //Custom functions
-    public function getTransactionsByBudgetId( $filters, $budgetId) {
-
-        $user = Auth::user();
-
-        return $user
-                ->transactions()
-                ->where('in_budget_id', $budgetId)
-                ->when(
-                    $filters['dateFrom'] ?? false,
-                    fn($query, $value) => $query->where('created_at', '>=', $value)
-                )
-                ->when(
-                    $filters['dateTo'] ?? false,
-                    fn($query, $value) => $query->where('created_at', '<=', $value)
-                )
-                ->when(
-                    $filters['in_category_id'] ?? false,
-                    fn($query, $value) => $query->where('in_category_id', $value)
-                )
-                ->with('category', 'budget')
-                ->orderByDesc('created_at')
-                ->get();
-        //return $transactions = Transaction::where('in_budget_id', $budgetId)->with('category', 'budget')->get();
-    }
 }

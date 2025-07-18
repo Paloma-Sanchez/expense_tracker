@@ -8,28 +8,26 @@ use Illuminate\Http\Request;
 //Services
 use App\Services\BudgetService;
 use App\Services\TransactionService;
-
-// controllers
-use App\Http\Controllers\CategoryController;
+use App\Services\CategoryService;
 
 
 class TrackerController extends Controller
 {
     protected $transactionService;
     protected $budgetService;
-    protected $categoryController;
+    protected $categoryService;
 
-    public function __construct(TransactionService $transactionService, BudgetService $budgetService, CategoryController $categoryController) 
+    public function __construct(TransactionService $transactionService, BudgetService $budgetService, CategoryService $categoryService) 
     {
         $this->transactionService = $transactionService;
         $this->budgetService = $budgetService;
-        $this->categoryController = $categoryController;
+        $this->categoryService = $categoryService;
     }
 
     public function index () {
         $transactions = $this->transactionService->getAllTransactionsByUserId();
         $budgets = $this->budgetService->getAllBudgets(1);
-        $categories = $this->categoryController->getAllCategories();
+        $categories = $this->categoryService->getAllCategories();
 
         return inertia(
             'Tracker/Index',

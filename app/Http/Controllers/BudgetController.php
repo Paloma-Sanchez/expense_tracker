@@ -13,15 +13,22 @@ use Illuminate\Support\Facades\Auth;
 //Models
 use App\Models\Budget;
 
-//Other Controllers
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TransactionController;
+//Services
+use App\Services\TransactionService;
+use App\Services\CategoryService;
 
 class BudgetController extends Controller
 {
-    public function __contruct() {
-        $this->authorizeResource(Budget::class, 'budegt');
+    protected $transactionService;
+
+    public function __construct(TransactionService $transactionService, CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+        $this->transactionService = $transactionService;
+        // $this->authorizeResource(Budget::class, 'budget');
+
     }
+
     // protected $categoryController
 
     // public function __construct(TransactionService $transactionService, BudgetService $budgetService, CategoryController $categoryController) 
@@ -74,8 +81,8 @@ class BudgetController extends Controller
         ]);
 
 
-        $transactions = (new TransactionController)->getTransactionsByBudgetId($filters, $budget->id);
-        $categories = (new CategoryController)->getAllCategories();
+        $transactions = $this->transactionService->getTransactionsByBudgetId($budget->id, $filters);
+        $categories = $this->categoryService->getAllCategories();
 
         return inertia(
             'Budget/BudgetDetail',

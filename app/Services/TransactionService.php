@@ -16,32 +16,25 @@ class TransactionService {
                 ->paginate(5);
     }
 
-    public function getTransactionsByBudgetId( $request, $budgetId) {
-        $filters = $request->only([
-            'dateFrom',
-            'dateTo',
-            'in_catgory_id'
-        ]);
+    public function getTransactionsByBudgetId($budgetId, $filters) {
 
         $user = Auth::user();
 
-        $query = $user
-                    ->transactions()
-                    ->where('in_budget_id', $budgetId);
-                    
-        if($filters['dateFrom'] ?? false) {
-            $query->where('created_at', '>=', $filters['dateFrom']);
-        }
-
-        if($filters['dateTo'] ?? false) {
-            $query->where('created_at', '<=', $filters['dateTo']);
-        }
-
-        if($filters['in_category_id'] ?? false) {
-            $query->where('in_category_id', $filters['in_category_id']);
-        }
-
-        return $query
+        return $user
+                ->transactions()
+                ->where('in_budget_id', $budgetId)
+                ->when(
+                    $filters['dateFrom'] ?? false,
+                    fn($query, $value) => $query->where('created_at', '>=', $value)
+                )
+                ->when(
+                    $filters['dateTo'] ?? false,
+                    fn($query, $value) => $query->where('created_at', '<=', $value)
+                )
+                ->when(
+                    $filters['in_category_id'] ?? false,
+                    fn($query, $value) => $query->where('in_category_id', $value)
+                )
                 ->with('category', 'budget')
                 ->orderByDesc('created_at')
                 ->get();

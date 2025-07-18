@@ -63,9 +63,4 @@ class CategoryController extends Controller
     {
         //
     }
-
-    public function getAllCategories() {
-        return response()->json(Category::select('id', 'category')->get())->original;
-    }
-
 }
