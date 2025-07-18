@@ -1,20 +1,24 @@
 <template>
-<div class="max-w-8/10 mx-auto pt-[50px]">
-  <Link
-    class="flex items-center text-gray-500 cursor-pointer hover:bg-blue-700 hover:text-white py-3 ps-5 pe-6 rounded-md w-fit"
-    href="/logout"
-    method="delete"
-    as="button"
+<div class="max-w-8/10 mx-auto pt-[40px]">
+  <div
+    class="w-full flex justify-end"
   >
-    Sign out
-  </Link>
+    <Link
+      class="btn-secondary"
+      href="/logout"
+      method="delete"
+      as="button"
+    >
+      Sign out
+    </Link>
+  </div>
 
-  <h2 class="text-center text-5xl mb-14  ">Hello {{ user.name }}!</h2>
+  <h2 class="text-center text-5xl mt-12 mb-20 font-semibold ">Hello {{ user.name }}!</h2>
 
   <!-- BUDGETS -->
-  <div class="mb-8">
-    <div class="flex items-center justify-between  mb-6">
-      <h3 class="font-semibold text-2xl">Active budgets</h3>
+  <div class="mb-16">
+    <div class="flex items-center justify-between  mb-10">
+      <h3 class=" text-3xl">Active budgets</h3>
       <CommonButton
         @click="makeModalVisible('AddBudget')"
         label="Add new budget"
@@ -28,8 +32,8 @@
 
   <!-- TRANSACTIONS -->
   <div>
-    <div class="flex items-center justify-between  mb-6">
-      <h3 class="font-semibold text-2xl ">All transactions</h3>
+    <div class="flex items-center justify-between  mb-10">
+      <h3 class="text-3xl ">All transactions</h3>
       <CommonButton
         @click="makeModalVisible('AddTransaction')"
         label="Add a transaction"

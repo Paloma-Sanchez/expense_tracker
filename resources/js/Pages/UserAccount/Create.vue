@@ -1,13 +1,13 @@
 <template>
 <div>
   <h2
-    class="text-3xl text-center font-semibold mt-32 mb-24"
+    class="text-4xl text-center font-semibold mt-36 mb-18"
   >
     Sign up to start using your tracker
   </h2>
   <form
     @submit.prevent="handleSubmit"
-    class="max-w-[50%] mx-auto"
+    class="max-w-[400px] mx-auto"
   >
     <common-input
       v-model="form.name"

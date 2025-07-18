@@ -14,7 +14,7 @@
     v-model="inputValue"
     :name="name" 
     :type="type"
-    class="border w-full h-[40px] rounded-lg mt-3 ps-3"
+    class="border focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 border-gray-800/50 w-full h-[40px] rounded-lg mt-3 ps-3"
     ref="input-instance" 
   />
 

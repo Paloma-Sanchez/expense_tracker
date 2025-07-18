@@ -7,7 +7,13 @@
     v-html="link.label"
     :href="link.url? link.url : ''"
     :key="index"
-    class="bg-blue-600 mx-2 p-3 rounded text-white cursor-pointer"
+    :class="[
+      {
+      'text-white! font-semibold bg-blue-600': index === currentPage,
+      'btn-reverse': index !== 0 && index !== (links.length - 1),
+      'text-blue-700': index !== currentPage
+      }
+    ]"
   >
   </Link>
 </div>
@@ -15,8 +21,14 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
+import { computed } from 'vue';
 
 const props = defineProps({
+  currentPage: {
+    type: Number,
+    required: true
+  },
+
   links: {
     type:Array,
     required:true

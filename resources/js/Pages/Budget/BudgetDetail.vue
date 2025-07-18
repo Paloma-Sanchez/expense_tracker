@@ -1,7 +1,7 @@
 <template>
 <div class="max-w-8/10 mx-auto pt-[50px]">
   <Link
-    class="flex items-center text-gray-500 cursor-pointer hover:bg-blue-700 hover:text-white py-3 ps-5 pe-6 rounded-md w-fit"
+    class="btn-secondary"
     href="/tracker"
   >
     <chevron-left
@@ -80,6 +80,7 @@
   <div class="flex justify-end mt-6 mb-6">
     <CommonButton
       @click="makeModalVisible('AddTransaction')"
+      class="btn-primary"
       label="Add a transaction"
     />
   </div>
