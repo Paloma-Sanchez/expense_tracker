@@ -53,6 +53,7 @@
 
     <common-pagination
       :links="transactions.links"
+      :current-page="transactions.current_page"
     />
   </div>
   <pre>{{ user }}</pre>
