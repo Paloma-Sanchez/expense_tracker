@@ -29,16 +29,29 @@
       :error="form.errors.password"
       name="password"
       label="Password"
-      focused
     />
 
     <div
-      class="text-center"
+      class="text-center mb-16"
     >
       <common-button
+        class="text-lg! px-8!"
         label="Sign up"
       />
     </div>
+
+    <!-- Sign in -->
+    <span
+      class="block text-center text-sm text-gray-700"
+    >
+      You have an account already?
+    </span>
+    <Link
+      class="block text-center text-lg hover:text-blue-700 hover:font-semibold"
+      href="/login"
+    >
+      Sign in
+    </Link>
   </form>
   <pre>{{form}}</pre>
 
@@ -46,7 +59,7 @@
 </template>
 
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3';
 import CommonButton from '../Common/Button.vue'
 import CommonInput from '../Common/Input.vue'
 
