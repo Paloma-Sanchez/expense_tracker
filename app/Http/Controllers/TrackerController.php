@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\TransactionService;
+
+
+//Services
 use App\Services\BudgetService;
+use App\Services\TransactionService;
 
 // controllers
 use App\Http\Controllers\CategoryController;
@@ -24,7 +27,7 @@ class TrackerController extends Controller
     }
 
     public function index () {
-        $transactions = $this->transactionService->getAllTransactions();
+        $transactions = $this->transactionService->getAllTransactionsByUserId();
         $budgets = $this->budgetService->getAllBudgets(1);
         $categories = $this->categoryController->getAllCategories();
 

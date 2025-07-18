@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+//facades
+use Illuminate\Support\Facades\Auth; 
+
+//models
 use App\Models\Budget;
 
 class BudgetService {
-    public function getAllBudgets($userId) {
-        return Budget::where('by_user_id', $userId)->get();
+    public function getAllBudgets() {
+        $user = Auth::user();
+        return $user->budgets;
     }
 }

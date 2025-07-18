@@ -21,6 +21,13 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'is_admin' => true
+        ]);
+
+        User::factory()->create([
+            'name' => 'Second Test User',
+            'email' => 'test2@example.com',
+            'is_admin' => false
         ]);
 
         Category::factory(4)
@@ -31,9 +38,14 @@ class DatabaseSeeder extends Seeder
             ['category' => 'groceries'],
             )
             ->create();
-        Budget::factory(5)->create([
-            'by_user_id' => 1
-        ]);
+
+        Budget::factory(5)->create(
+            ['by_user_id' => 1]
+        );
+        Budget::factory(5)->create(
+            ['by_user_id' => 2]
+        );
+        
         Transaction::factory(30)
             ->sequence(
                 ['in_budget_id' => 1,],
@@ -49,8 +61,10 @@ class DatabaseSeeder extends Seeder
                 ['in_category_id' => 3,],
                 ['in_category_id' => 4,],
             )
-            ->create([
-                'owner_id' => 1,
-            ]);
+            ->sequence(
+                ['owner_id' => 1],
+                ['owner_id' => 2]
+            )
+            ->create();
     }
 }

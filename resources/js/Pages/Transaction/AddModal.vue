@@ -88,17 +88,13 @@
       </div>
     </form>
   </div>
-  <pre>{{newTransactionForm}}</pre>
 </common-modal-container>
 </template>
 
 
 <script setup>
-// vue imports
-import { reactive } from 'vue';
-
 //inertia
-import { router, useForm, usePage } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 //components
 import CommonButton from '../Common/Button.vue';
@@ -131,7 +127,7 @@ const newTransactionForm = useForm({
   description: '',
   amount: null,
   in_category_id: 1,  
-  in_budget_id: props.budget_id ?? (props.budgets[0]?.id ?? 1),
+  in_budget_id: props.budget_id ?? (props.budgets[0].id),
   owner_id: props.ownerId
 }); 
 
@@ -144,6 +140,8 @@ const handleCancel = () => {
 }
 
 const handleAddTransaction = () => {
-  newTransactionForm.post('/transaction')
+  newTransactionForm.post('/transaction',{
+    onSuccess:(()=> emit('closeModal'))
+  })
 }
 </script>

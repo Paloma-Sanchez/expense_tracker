@@ -16,11 +16,10 @@
         label="Budget name"
         focused
       />
-      
       <common-input
         v-model="newBudgetForm.amount"
-        name="name"
-        label="Budget name"
+        name="amount"
+        label="Amount"
         type="number"
       />
   

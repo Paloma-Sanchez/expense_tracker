@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(
-                App\Models\User::class,
-                'by_user_id'
-            )->constrained('users');
+                    App\Models\User::class,
+                    'by_user_id'
+                )
+                ->constrained('users');
             $table->text('name');
             $table->float('budget_amount', precision: 2);
         });

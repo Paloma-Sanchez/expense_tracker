@@ -6,6 +6,9 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use Illuminate\Http\Request;
 
+//facades
+use Illuminate\Support\Facades\Auth; 
+
 //models
 use App\Models\Transaction;
 
@@ -35,8 +38,11 @@ class TransactionController extends Controller
         \Log::info('Requeste', $request->all());
 
         $validated = $request->validate([
-            'amount' => 'required|decimal:2|max:1000000|min:-1000000',
+            'amount' => 'required|numeric|decimal:0,2|max:1000000|min:-1000000',
             'description' => 'required|string|min:1|max:100',
+            'in_category_id' => 'required|exists:categories,id',
+            'in_budget_id' => 'required|exists:budgets,id',
+            'owner_id' => 'required|exists:users,id',
         ]);
 
         Transaction::create($validated);
@@ -66,18 +72,19 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTransactionRequest $request, Transaction $transaction)
-    {   
-        \Log::info('Transaction update payload:', $request->all());
-    
-        $transaction->update(
-            $request->only(
-                'description',
-                'amount',
-                'in_category_id'
-            )
-        );
-    
+    public function update(Request $request, Transaction $transaction)
+    {
+        \Log::info('Update payload:', $request->all());
+
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'amount' => 'required|numeric',
+            'in_category_id' => 'required|exists:categories,id',
+            // ... any other fields
+        ]);
+
+        $transaction->update($validated);
+
         return redirect()->back();
     }
 
@@ -93,7 +100,28 @@ class TransactionController extends Controller
     }
 
     //Custom functions
-    public function getTransactionsByBudgetId($budgetId) {
-        return $transactions = Transaction::where('in_budget_id', $budgetId)->with('category', 'budget')->get();
+    public function getTransactionsByBudgetId( $filters, $budgetId) {
+
+        $user = Auth::user();
+
+        return $user
+                ->transactions()
+                ->where('in_budget_id', $budgetId)
+                ->when(
+                    $filters['dateFrom'] ?? false,
+                    fn($query, $value) => $query->where('created_at', '>=', $value)
+                )
+                ->when(
+                    $filters['dateTo'] ?? false,
+                    fn($query, $value) => $query->where('created_at', '<=', $value)
+                )
+                ->when(
+                    $filters['in_category_id'] ?? false,
+                    fn($query, $value) => $query->where('in_category_id', $value)
+                )
+                ->with('category', 'budget')
+                ->orderByDesc('created_at')
+                ->get();
+        //return $transactions = Transaction::where('in_budget_id', $budgetId)->with('category', 'budget')->get();
     }
 }

@@ -35,17 +35,24 @@
         label="Add a transaction"
       />
     </div>
+
     <div
       class="max-h-[400px] h-1/4 overflow-clip overflow-y-scroll"
     >
       <transaction
-        v-for="transaction in transactions"
+        v-for="transaction in transactions.data"
         :key="transaction.id"
+        :categories="categories"
         :transaction="transaction"
       />
     </div>
+
+    <common-pagination
+      :links="transactions.links"
+    />
   </div>
   <pre>{{ user }}</pre>
+  <pre>{{ transactions }}</pre>
 </div>
 
 <!-- Modals -->
@@ -58,6 +65,7 @@
   v-if="openModal === 'AddTransaction'"
   :budgets="budgetNames"
   :categories="categories"
+  :ownerId="user.id"
   @close-modal="resetModal"
  />
 </template>
@@ -67,7 +75,7 @@
 import { format, parseISO } from 'date-fns';
 
 // vue
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 //inertia
 import { Link } from '@inertiajs/vue3';
@@ -76,6 +84,7 @@ import { Link } from '@inertiajs/vue3';
 import BudgetAddModal from '../Budget/AddModal.vue';
 import BudgetPreviewList from '../Budget/BudgetPreviewList.vue';
 import CommonButton from '../Common/Button.vue';
+import CommonPagination from '../Common/Pagination.vue';
 import Transaction from '../Transaction/Index.vue';
 import TransactionAddModal from '../Transaction/AddModal.vue';
 import { usePage } from '@inertiajs/vue3';
@@ -92,9 +101,13 @@ const props = defineProps({
   },
 
   transactions: {
-    type: Array,
+    type: Object,
     required:true
   }
+})
+
+onMounted(() => {
+  console.log(props.transactions)
 })
 
 const openModal = ref(null)

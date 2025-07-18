@@ -36,7 +36,7 @@ Route::get('/categories/all', [CategoryController::class, 'getAllCategories'])
 
 //Budgets
 Route::resource('/budget', BudgetController::class)
-->middleware('auth');//->only(['show', 'store', 'destroy']);
+  ->middleware('auth');//->only(['show', 'store', 'destroy']);
 Route::get('/budgets/all', [BudgetController::class, 'getAllBudgets'])
   ->middleware('auth');;
 

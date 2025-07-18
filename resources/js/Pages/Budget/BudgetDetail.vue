@@ -60,11 +60,19 @@
 
   </div>
 
+  <!-- Filters -->
+  <common-filters
+    :categories="categories"
+    :budget-id="budget.id"
+    :filters="filters"
+  />
+
   <!-- Transactions -->
   <div class="max-h-[400px] h-full overflow-scroll">
     <transaction
       v-for="transaction in transactions"
       :key="transaction.id"
+      :categories="categories"
       :transaction="transaction"
     />
   </div>
@@ -79,7 +87,7 @@
 <pre>{{activeModal}}</pre>
 <pre>{{showAlert}}</pre>
 <pre>{{flash? flash : page.props.flash}}</pre>
-<pre>{{page.props.errors}}</pre>
+<pre>{{page.props.filters}}</pre>
 
 <!-- modals -->
  <transaction-add-modal
@@ -127,6 +135,7 @@ import { router, Link, usePage } from '@inertiajs/vue3'
 //components
 import CommonAlert from '../Common/Alert.vue';
 import CommonButton from '../Common/Button.vue';
+import CommonFilters from '../Common/Filters.vue';
 import BudgetModifyModal from './ModifyModal.vue';
 import Transaction from '../Transaction/Index.vue';
 import TransactionAddModal from '../Transaction/AddModal.vue';
@@ -144,6 +153,11 @@ const props = defineProps({
   categories: {
     type:Array,
     required:true
+  },
+
+  filters:{
+    type:Object,
+    default: () => {}
   },
 
   transactions: {
@@ -194,7 +208,7 @@ const handleNameChange = (newValue) => {
 const handleAmountChange = (newValue) => {
   console.log('changing budget')
   const payload = {
-    amount : newValue
+    budget_amount : newValue
   }
   
   router.put(`/budget/${props.budget.id}`, payload)

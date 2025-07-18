@@ -6,7 +6,7 @@
   <div class="pe-3  flex-auto">
     <div class="font-medium">
       <input
-        v-model="newData.description"
+        v-model="newDataForm.description"
         v-if="editTransactionActive"
         class="rounded ps-1 border border-gray-400/80"
         ref="description-input"
@@ -18,11 +18,22 @@
       </span>
     </div>
     <div>
-      <input
-        v-model="newData.category"
+      <div
         v-if="editTransactionActive"
-        class="rounded ps-1 border border-gray-400/80"
-      />
+      >
+        <select
+          v-model="newDataForm.in_category_id"
+          class="border w-1/2 h-[30px] rounded-lg mt-3 mb-8 ps-3"
+        >
+          <option 
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.category }}
+          </option>
+        </select>
+      </div>
       <span 
         v-else
         class="text-gray-500 text-sm" 
@@ -38,13 +49,13 @@
     class="w-min "
   >
     <input
-      v-model="newData.amount"
+      v-model="newDataForm.amount"
       v-if="editTransactionActive"
       class="rounded ps-1 border border-gray-400/80 w-fit min-w-1/10 me-5 max-w-[80px]"
     />
     <span 
       v-else
-      class="min-w-1/10 w-fit text-left flex justify-end font-medium me-5"
+      class="min-w-[80px] w-fit text-left flex justify-end font-medium me-5"
     >
       {{ transaction.amount }}
     </span>
@@ -102,7 +113,7 @@
 import { format, parseISO } from 'date-fns';
 
 //inertia
-import { router } from '@inertiajs/vue3'
+import { router, useForm } from '@inertiajs/vue3'
 
 //Logos
 import ThreeDotsVertical from '../../../../public/Icons/three-dots-vertical.svg'
@@ -117,13 +128,19 @@ const props = defineProps({
   transaction:{
     type: Object,
     required:true
+  },
+
+  categories:{
+    type: Array,
+    required:true
   }
 })
 
 const editTransactionActive = ref(false)
-const newData = reactive({
+
+const newDataForm = useForm({
   description: props.transaction.description,
-  category: props.transaction.category.category,
+  in_category_id: props.transaction.category.id,
   amount: props.transaction.amount,
 })
 
@@ -134,6 +151,7 @@ const menuOpen=ref(false)
 
 //helpers
 const formatDate = (dateString)=> {
+  console.log('date', dateString)
   const date = parseISO(dateString);
   return format(date, 'dd/MM/yy');
 }
@@ -164,15 +182,10 @@ const handleEdit = () => {
 }
 
 const handleConfirmChange = () => {
-  const payload = {
-    description: newData.description,
-    amount: newData.amount,
-    in_category_id: 2//newData.in_category_id // if you want to update category
-  };
 
-  console.log('changing transaction', payload)
+  console.log('changing transaction', newDataForm)
 
-  router.put(`/transaction/${props.transaction.id}`, payload);
+  newDataForm.put(`/transaction/${props.transaction.id}`);
 
   toggleEditTransaction()
 }
