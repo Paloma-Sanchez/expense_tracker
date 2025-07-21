@@ -1,24 +1,30 @@
 <template>
   <form
     @submit.prevent="handleFilterRequest"
-    class="flex mb-5"
+    class="flex mb-5 "
   >
-    <input
-      v-model="filterForm.dateFrom"
-      name="from"
-      label="From"
-      placeholder="From"
-    />
+    <div>
+      <input
+        v-model="filterForm.dateFrom"
+        class="border border-blue-600/40 ps-2 rounded-s-md w-28 md:w-36 lg:w-40 py-1"
+        name="from"
+        label="From"
+        placeholder="From"
+      />
 
-    <input
-      v-model="filterForm.dateTo"
-      name="to"
-      label="To"
-      placeholder="To"
-    />
+      <input
+        v-model="filterForm.dateTo"
+        class="border border-blue-600/40 ps-2 rounded-e-md border-s-0 w-28 md:w-36 lg:w-40 py-1"
+        name="to"
+        label="To"
+        placeholder="To"
+      />
+    </div>
+
 
     <select
       v-model="filterForm.in_category_id"
+      class="border border-blue-600/40 ps-2 rounded-md md:w-40 py-1 ms-2 md:ms-6"
     >
       <option
         v-for="category in categories"
@@ -30,7 +36,7 @@
     </select>
 
     <button
-      class="btn-ghost ms-6 me-3"
+      class="btn-ghost md:ms-6 md:me-3 mx-2"
       type="submit"
     >
       Filter
@@ -38,6 +44,7 @@
 
     <button
       @click="handleClear"
+      class="hover:text-blue-600 hover:font-bold cursor-pointer hover:underline"
       type="clear"
     >
       Clear

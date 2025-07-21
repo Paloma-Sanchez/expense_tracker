@@ -1,5 +1,5 @@
 <template>
-<div class="w-3xs text-center py-[25px] rounded-md border hover:bg-blue-500/30 hover:text-blue-600 cursor-pointer">
+<div class="w-[240px] text-center py-[25px] rounded-md border hover:bg-blue-500/30 hover:text-blue-600 cursor-pointer">
   <Link
     :href="`/budget/${budget.id}`"
   >

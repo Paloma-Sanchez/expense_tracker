@@ -34,41 +34,50 @@
   </div>
   
 
-  <div class="flex items-center justify-between mb-12">
-    <div>
-      <span class="text-center text-xl">Current balance: </span>&nbsp;
-      <span class="text-center text-2xl font-bold">${{ budgetLeft }}</span>
-      <br/>
-
-      <div class="text-sm mt-4 flex items-center">
-        <span class="text-sm me-2"> remaining from initial budget of </span>
-        <span 
-          class="text-md font-semibold"
-          :class="{
-            'text-green-800': budget.budget_amount > 0,
-            'text-red-500': budget.budget_amount <= 0
-          }"
-        > 
-          ${{ budget.budget_amount }} 
-        </span>
-        <edit
-          @click="makeModalVisible('changeAmount')"
-          width="12px"
-          height="12px"
-          class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
-        />
+  <div class="md:flex items-center justify-between mb-12 ">
+    <div
+      class="flex justify-center"
+    >
+      <div>
+        <span class="text-center text-xl">Current balance: </span>&nbsp;
+        <span class="text-center text-2xl font-bold">${{ budgetLeft }}</span>
+        <br/>
+  
+        <div class="text-sm mt-4 flex items-center">
+          <span class="text-sm me-2"> remaining from initial budget of </span>
+          <span 
+            class="text-md font-semibold"
+            :class="{
+              'text-green-800': budget.budget_amount > 0,
+              'text-red-500': budget.budget_amount <= 0
+            }"
+          > 
+            ${{ budget.budget_amount }} 
+          </span>
+          <edit
+            @click="makeModalVisible('changeAmount')"
+            width="12px"
+            height="12px"
+            class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
+          />
+        </div>
       </div>
     </div>
-    <common-pie
-      :data="page.props.chartData"
-      class="mr-24"
-    />
+    
+    <div
+      class="lg:mr-24 flex justify-center mt-12 md:mt-0"
+    >
+      <common-pie
+        :data="page.props.chartData"
+      />
+    </div>
+
   </div>
 
 
 
   <!-- Button -->
-  <div class="flex justify-end mt-6 mb-6">
+  <div class="flex justify-end mt-6 mb-10 lg:mb-6">
     <CommonButton
       @click="makeModalVisible('AddTransaction')"
       class="btn-primary"
