@@ -81,16 +81,20 @@ class BudgetController extends Controller
         ]);
 
 
-        $transactions = $this->transactionService->getTransactionsByBudgetId($budget->id, $filters);
         $categories = $this->categoryService->getAllCategories();
+        $transactions = $this->transactionService->getTransactionsByBudgetId($budget->id, $filters);
+        $transactionsTotal = $this->transactionService->getTransactionsTotalByBudget($budget->id);
+        $chartData = $this->transactionService->getTransactionTotalByBudgetAndCategory($budget->id);
 
         return inertia(
             'Budget/BudgetDetail',
             [
                 'budget' => $budget,
                 'transactions' => $transactions,
+                'transactionsTotal' => $transactionsTotal,
                 'categories' => $categories,
-                'filters' => $filters
+                'filters' => $filters,
+                'chartData' => $chartData
             ]
             );
     }

@@ -53,7 +53,6 @@
       Sign in
     </Link>
   </form>
-  <pre>{{form}}</pre>
 
 </div>
 </template>

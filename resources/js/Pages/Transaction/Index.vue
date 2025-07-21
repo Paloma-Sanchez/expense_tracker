@@ -100,6 +100,8 @@
     </button>
   </div>
 </div>
+
+<!-- Menu -->
 <transaction-action-menu
   v-click-away="toggleMenu"
   v-if="menuOpen"

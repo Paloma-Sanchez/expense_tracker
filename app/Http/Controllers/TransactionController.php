@@ -36,6 +36,7 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         \Log::info('Requeste', $request->all());
+        $request->session()->forget('success');
 
         $validated = $request->validate([
             'amount' => 'required|numeric|decimal:0,2|max:1000000|min:-1000000',
@@ -45,11 +46,11 @@ class TransactionController extends Controller
             'owner_id' => 'required|exists:users,id',
         ]);
 
-        Transaction::create($validated);
+        $transaction = Transaction::create($validated);
 
         return redirect()
             ->back()
-            ->with('success', 'Transaction created');
+            ->with('success', 'Transaction created  ' . $transaction->id);
 
     }
 

@@ -1,5 +1,5 @@
 <template>
-<div class="max-w-8/10 mx-auto pt-[40px]">
+<div class="max-w-8/10 mx-auto pt-[40px] mb-20">
   <div
     class="w-full flex justify-end"
   >
@@ -56,8 +56,6 @@
       :current-page="transactions.current_page"
     />
   </div>
-  <pre>{{ user }}</pre>
-  <pre>{{ transactions }}</pre>
 </div>
 
 <!-- Modals -->

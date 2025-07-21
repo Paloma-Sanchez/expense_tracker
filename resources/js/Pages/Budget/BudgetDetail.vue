@@ -1,5 +1,5 @@
 <template>
-<div class="max-w-8/10 mx-auto pt-[50px]">
+<div class="max-w-8/10 mx-auto pt-[50px] mb-20">
   <Link
     class="btn-secondary"
     href="/tracker"
@@ -12,16 +12,27 @@
     Go back
   </Link>
 
-  <span class="text-center text-xs mt-5 mb-3 block text-gray-500">Budget detail</span>
-  <div class="mb-14 flex  justify-center">
-    <h2 class="text-5xl ">{{budget?.name}}</h2>
-    <edit
-      @click="makeModalVisible('changeName')"
-      width="12px"
-      height="12px"
-      class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
-    />
+  <div
+    class="mb-14 text-center"
+  >
+    <span class="text-center text-xs mt-5 mb-3 block text-gray-500">Budget detail</span>
+    <div class="flex  justify-center">
+      <h2 class="text-5xl ">{{budget?.name}}</h2>
+      <edit
+        @click="makeModalVisible('changeName')"
+        width="12px"
+        height="12px"
+        class="stroke-gray-600 hover:stroke-orange-500 cursor-pointer ms-2"
+      />
+    </div>
+    <span 
+      @click="handleDeleteBudget"
+      class="text-gray-500 hover:text-red-500 hover:underline cursor-pointer mt-2 block text-sm"
+    >
+      Delete Budget
+    </span>
   </div>
+  
 
   <div class="flex items-center justify-between mb-12">
     <div>
@@ -48,16 +59,21 @@
         />
       </div>
     </div>
-    <div class="flex items-center">
+    <common-pie
+      :data="page.props.chartData"
+      class="mr-24"
+    />
+  </div>
 
-      <span 
-        @click="handleDeleteBudget"
-        class="text-gray-500 hover:text-red-500 hover:underline cursor-pointer ms-2"
-      >
-        Delete Budget
-      </span>
-    </div>
 
+
+  <!-- Button -->
+  <div class="flex justify-end mt-6 mb-6">
+    <CommonButton
+      @click="makeModalVisible('AddTransaction')"
+      class="btn-primary"
+      label="Add a transaction"
+    />
   </div>
 
   <!-- Filters -->
@@ -70,25 +86,20 @@
   <!-- Transactions -->
   <div class="max-h-[400px] h-full overflow-scroll">
     <transaction
-      v-for="transaction in transactions"
+      v-for="transaction in transactions.data"
       :key="transaction.id"
       :categories="categories"
       :transaction="transaction"
     />
   </div>
 
-  <div class="flex justify-end mt-6 mb-6">
-    <CommonButton
-      @click="makeModalVisible('AddTransaction')"
-      class="btn-primary"
-      label="Add a transaction"
-    />
-  </div>
+  <!-- Pagination -->
+  <common-pagination
+    :current-page="transactions.current_page"
+    :links="transactions.links"
+  />
 </div>
-<pre>{{activeModal}}</pre>
-<pre>{{showAlert}}</pre>
-<pre>{{flash? flash : page.props.flash}}</pre>
-<pre>{{page.props.filters}}</pre>
+
 
 <!-- modals -->
  <transaction-add-modal
@@ -120,7 +131,7 @@
   v-if="showAlert"
   @show="activateAlert"
   @close="deactivateAlert"
-  :description="flash"
+  :description="flash.split('  ')[0]"
   label="Success!"
 />
 </template>
@@ -137,6 +148,8 @@ import { router, Link, usePage } from '@inertiajs/vue3'
 import CommonAlert from '../Common/Alert.vue';
 import CommonButton from '../Common/Button.vue';
 import CommonFilters from '../Common/Filters.vue';
+import CommonPagination from '../Common/Pagination.vue';
+import CommonPie from '../Common/Pie.vue';
 import BudgetModifyModal from './ModifyModal.vue';
 import Transaction from '../Transaction/Index.vue';
 import TransactionAddModal from '../Transaction/AddModal.vue';
@@ -157,13 +170,18 @@ const props = defineProps({
   },
 
   filters:{
-    type:Object,
+    type: Object,
     default: () => {}
   },
 
   transactions: {
-    type:Array,
-    required:true
+    type: Object,
+    required: true
+  },
+
+  transactionsTotal: {
+    type: Number,
+    required: true
   }
 })
 
@@ -177,8 +195,7 @@ const showAlert=ref(null);
 
 //computed
 const budgetLeft = computed(() => {
-  const spent = props.transactions.reduce((acc, t) => acc + Number(t.amount), 0);
-  return Number.parseFloat((Number(props.budget.budget_amount) + spent)).toFixed(2);
+  return Number.parseFloat((Number(props.budget.budget_amount) + props.transactionsTotal)).toFixed(2);
 });
 
 //watch

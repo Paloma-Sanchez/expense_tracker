@@ -27,7 +27,7 @@ class UserAccountController extends Controller
 
         return redirect()
                 ->route('login')
-                ->with('success', 'account created');
+                ->with('success', 'Account created  ');
     }
 
 }

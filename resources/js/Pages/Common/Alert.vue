@@ -11,7 +11,7 @@
     class="text-xs  text-green-800 mb-2 block"
   >{{ description }}</span>
   <div
-    class="h-0.5 bg-green-800 transition duration-200 ease-in-out "
+    class="h-0.5 bg-green-800 transition duration-900 linear"
     ref="progress-bar"
   ></div>
 </div>
@@ -59,7 +59,7 @@ const startTimer = () => {
       emit('close')
       stopTimer();
     }
-  }, 1000);
+  }, 100);
 }
 
 const stopTimer = () => {

@@ -30,9 +30,10 @@
     </select>
 
     <button
+      class="btn-ghost ms-6 me-3"
       type="submit"
     >
-      filter
+      Filter
     </button>
 
     <button
@@ -83,5 +84,9 @@ const handleClear = () => {
   filterForm.dateFrom = null,
   filterForm.dateTo = null,
   filterForm.in_category_id = null
+}
+
+const formatDate = () => {
+
 }
 </script>

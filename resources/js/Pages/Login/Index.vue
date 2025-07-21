@@ -46,8 +46,6 @@
       Register now
     </Link>
   </form>
-  <pre>{{form}}</pre>
-
 </div>
 </template>
 
