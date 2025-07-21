@@ -67,7 +67,6 @@ const emit = defineEmits(['closeModal'])
 
 //Event listeners
 const handleCancel = () => {
-  console.log('cancel')
   emit('closeModal')
 }
 

@@ -153,7 +153,6 @@ const menuOpen=ref(false)
 
 //helpers
 const formatDate = (dateString)=> {
-  console.log('date', dateString)
   const date = parseISO(dateString);
   return format(date, 'dd/MM/yy');
 }
@@ -184,9 +183,6 @@ const handleEdit = () => {
 }
 
 const handleConfirmChange = () => {
-
-  console.log('changing transaction', newDataForm)
-
   newDataForm.put(`/transaction/${props.transaction.id}`);
 
   toggleEditTransaction()

@@ -48,8 +48,6 @@ const startTimer = () => {
   const initalSeconds = 30 
   let secondsLeft = initalSeconds;
 
-  console.log('progessBar', progressBar)
-
   progressBar.value.style.width = '100%'
 
   countdown = setInterval(() => {

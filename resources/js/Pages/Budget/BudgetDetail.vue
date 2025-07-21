@@ -106,6 +106,7 @@
   <common-pagination
     :current-page="transactions.current_page"
     :links="transactions.links"
+    :last-page="transactions.last_page"
   />
 </div>
 
@@ -233,7 +234,6 @@ const handleNameChange = (newValue) => {
 }
 
 const handleAmountChange = (newValue) => {
-  console.log('changing budget')
   const payload = {
     budget_amount : newValue
   }
@@ -251,7 +251,6 @@ const resetModal = () => {
 }
 
 const activateAlert = () => {
-  console.log('activate')
   if(showAlert.value) {
     deactivateAlert()
 

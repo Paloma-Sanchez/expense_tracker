@@ -49,6 +49,7 @@ class TransactionService {
             ->with('category', 'budget')
             ->orderByDesc('created_at')
             ->paginate(5);
+            // ->withQueryString();
     }
 
     public function getTransactionsTotalByBudget($budgetId) {

@@ -80,7 +80,6 @@ const filterForm = useForm({
 
 //helpers
 const handleFilterRequest = () => {
-  console.log(filterForm)
   filterForm.get(`${props.budgetId}`, {
     preserveState: true,
     preserveScroll: true
