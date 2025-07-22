@@ -79,7 +79,7 @@ class TransactionController extends Controller
 
         $validated = $request->validate([
             'description' => 'required|string',
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|decimal:0,2|min:-1000000|max:1000000',
             'in_category_id' => 'required|exists:categories,id',
         ]);
 

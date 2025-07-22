@@ -60,7 +60,7 @@ class BudgetController extends Controller
        // dd($request->all());
        $validated = $request->validate([
             'name' => 'required|max:100|string',
-            'budget_amount' => 'required|max:1000000|decimal:0,2|numeric',
+            'budget_amount' => 'required|max:1000000|min:-1000000|decimal:0,2|numeric',
             'by_user_id' => 'required|exists:users,id'
        ]);
 
@@ -122,7 +122,7 @@ class BudgetController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'budget_amount' => 'required|numeric|decimal:0,2|max:1000000',
+            'budget_amount' => 'required|numeric|decimal:0,2|max:1000000|min:-1000000',
         ]);
 
         $budget->update(
