@@ -23,9 +23,17 @@
 }
 
 .btn-ghost {
-    @apply shadow-blue-500/80 hover:shadow-md bg-blue-400/30 text-blue-700 border border-blue-700/60 hover:text-white hover:font-semibold active:font-semibold hover:bg-blue-600 active:bg-blue-700 py-1 px-2 rounded cursor-pointer
+    @apply shadow-blue-500/80 enabled:hover:shadow-md bg-blue-400/30 text-blue-700 border border-blue-700/60 enabled:hover:text-white enabled:hover:font-semibold enabled:active:font-semibold enabled:hover:bg-blue-600 active:bg-blue-700 py-1 px-2 rounded cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-300/60 disabled:border-gray-400 disabled:text-gray-600 
 }
 
 .input-primary {
-    @apply border
+    @apply border focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 border-gray-800/50 w-full rounded-lg ps-3
+}
+
+.input-diabled {
+    @apply disabled:cursor-not-allowed disabled:bg-gray-300/60 disabled:border-gray-400
+}
+
+.select-primary {
+    @apply border border-gray-800/50 rounded-lg ps-3
 }
