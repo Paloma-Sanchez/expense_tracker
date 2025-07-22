@@ -5,11 +5,14 @@
 >
   <div class="pe-3  flex-auto">
     <div class="font-medium">
-      <input
+      <common-input
         v-model="newDataForm.description"
         v-if="editTransactionActive"
-        class="rounded ps-1 border border-gray-400/80"
-        ref="description-input"
+        :custom-class="true"
+        :error="newDataForm.errors.description"
+        class="w-fit"
+        name="description"
+        focused
       />
       <span
         v-else
@@ -23,7 +26,7 @@
       >
         <select
           v-model="newDataForm.in_category_id"
-          class="border w-1/2 h-[30px] rounded-lg mt-3 mb-8 ps-3"
+          class="w-fit h-[26px] mt-1.5 px-3 select-primary"
         >
           <option 
             v-for="category in categories"
@@ -46,12 +49,15 @@
   <span class="pe-3 text-xs text-gray-500 min-w-1/10 me-3">{{ formatDate(transaction.created_at) }}</span>
 
   <div 
-    class="w-min "
+    class="flex items-center"
   >
-    <input
+    <common-input
       v-model="newDataForm.amount"
       v-if="editTransactionActive"
-      class="rounded ps-1 border border-gray-400/80 w-fit min-w-1/10 me-5 max-w-[80px]"
+      :custom-class="true"
+      :error="newDataForm.errors.amount"
+      class="w-fit min-w-1/10 max-w-[80px] me-3"
+      name="amount"
     />
     <span 
       v-else
@@ -68,12 +74,13 @@
     @click="toggleMenu"
   >
     <three-dots-vertical
-      class="cursor-pointer"
+      class="cursor-pointer "
       height="18px"
       width="24px"
       fill="#aaa"
     />
   </button>
+
   <div
     v-else
     class="flex items-center"
@@ -82,7 +89,7 @@
       @click="handleConfirmChange"
     >
       <check-square-fill
-        class="cursor-pointer me-2"
+        class="cursor-pointer me-2 hover:scale-125"
         height="24px"
         width="24px"
         fill="#016630"
@@ -92,7 +99,7 @@
       @click="toggleEditTransaction"
     >
       <cancel-circle-fill
-        class="cursor-pointer"
+        class="cursor-pointer hover:scale-125"
         height="24px"
         width="24px"
         fill="#e7000b"
@@ -117,14 +124,17 @@ import { format, parseISO } from 'date-fns';
 //inertia
 import { router, useForm } from '@inertiajs/vue3'
 
+//vue
+import { nextTick, ref, useTemplateRef } from 'vue';
+
 //Logos
 import ThreeDotsVertical from '../../../../public/Icons/three-dots-vertical.svg'
 import CancelCircleFill from '../../../../public/Icons/cancel-circle-fill.svg'
 import CheckSquareFill from '../../../../public/Icons/check-square-fill.svg'
 
 //components
+import CommonInput from '../Common/Input.vue'
 import TransactionActionMenu from './ActionMenu.vue'
-import { nextTick, reactive, ref, useTemplateRef } from 'vue';
 
 const props = defineProps({
   transaction:{
@@ -162,6 +172,10 @@ const toggleMenu = () => {
 }
 
 const toggleEditTransaction = () => {
+  newDataForm.description = props.transaction.description
+  newDataForm.in_category_id = props.transaction.category.id
+  newDataForm.amount = props.transaction.amount
+
   editTransactionActive.value = !editTransactionActive.value
 }
 
@@ -183,8 +197,11 @@ const handleEdit = () => {
 }
 
 const handleConfirmChange = () => {
-  newDataForm.put(`/transaction/${props.transaction.id}`);
+  newDataForm.put(`/transaction/${props.transaction.id}`, {
+    onSuccess:() => toggleEditTransaction(),
+    preserveScroll:true
+  });
 
-  toggleEditTransaction()
+  // 
 }
 </script>

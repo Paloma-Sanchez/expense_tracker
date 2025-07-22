@@ -6,7 +6,8 @@
     <div>
       <input
         v-model="filterForm.dateFrom"
-        class="border border-blue-600/40 ps-2 rounded-s-md w-28 md:w-36 lg:w-40 py-1"
+        :disabled="disabled"
+        class="border border-blue-600/40 ps-2 rounded-s-md w-28 md:w-36 lg:w-40 py-1 input-diabled"
         name="from"
         label="From"
         placeholder="From"
@@ -14,7 +15,8 @@
 
       <input
         v-model="filterForm.dateTo"
-        class="border border-blue-600/40 ps-2 rounded-e-md border-s-0 w-28 md:w-36 lg:w-40 py-1"
+        :disabled="disabled"
+        class="border border-blue-600/40 ps-2 rounded-e-md border-s-0 w-28 md:w-36 lg:w-40 py-1 input-diabled"
         name="to"
         label="To"
         placeholder="To"
@@ -24,7 +26,8 @@
 
     <select
       v-model="filterForm.in_category_id"
-      class="border border-blue-600/40 ps-2 rounded-md md:w-40 py-1 ms-2 md:ms-6"
+      :disabled="disabled"
+      class="border border-blue-600/40 ps-2 rounded-md md:w-40 py-1 ms-2 md:ms-6 input-diabled"
     >
       <option
         v-for="category in categories"
@@ -36,7 +39,8 @@
     </select>
 
     <button
-      class="btn-ghost md:ms-6 md:me-3 mx-2"
+      :disabled="disabled"
+      class="btn-ghost md:ms-6 md:me-3 mx-2 "
       type="submit"
     >
       Filter
@@ -44,7 +48,7 @@
 
     <button
       @click="handleClear"
-      class="hover:text-blue-600 hover:font-bold cursor-pointer hover:underline"
+      class="hover:text-blue-600 hover:font-bold cursor-pointer hover:underline "
       type="clear"
     >
       Clear
@@ -69,6 +73,11 @@ const props = defineProps({
   filters:{
     type: Object,
     default: () => {}
+  },
+
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 

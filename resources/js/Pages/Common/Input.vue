@@ -1,26 +1,38 @@
 <template>
 <div
-  class="mb-8 "
+  :class="[{
+    'mb-8' : !customClass
+  }]"
 >
-  <label 
-    :for="name"
-    class="text-xl"
+  <div
+    v-if="label"
   >
-    {{ label }}
-  </label>
-  <br/>
+    <label 
+      :for="name"
+      class="text-xl"
+    >
+      {{ label }}
+    </label>
+    <br/>
+  </div>
+
 
   <input 
     v-model="inputValue"
     :name="name" 
     :type="type"
-    class="border focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 border-gray-800/50 w-full h-[40px] rounded-lg mt-3 ps-3"
+    :class="['input-primary',
+      {
+        'mt-3' : label,
+        'h-[40px]': !customClass
+      }
+    ]"
     ref="input-instance" 
   />
 
   <span
     v-if="error"
-    class="text-red-700 text-sm mt-2 block"
+    class="text-red-700 text-sm mt-2 block overflow-hidden max-h-6 "
   >
     {{ error }}
   </span>
@@ -34,6 +46,11 @@ const props = defineProps({
   error: {
     type: String,
     default: ''
+  },
+
+  customClass:{
+    type: Boolean,
+    default: false
   },
 
   focused: {

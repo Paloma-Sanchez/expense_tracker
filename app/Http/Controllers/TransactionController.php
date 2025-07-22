@@ -81,7 +81,6 @@ class TransactionController extends Controller
             'description' => 'required|string',
             'amount' => 'required|numeric',
             'in_category_id' => 'required|exists:categories,id',
-            // ... any other fields
         ]);
 
         $transaction->update($validated);

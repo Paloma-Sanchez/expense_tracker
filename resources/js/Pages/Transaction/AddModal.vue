@@ -36,7 +36,7 @@
         <br/>
         <select
           v-model="newTransactionForm.in_category_id"
-          class="border w-full h-[40px] rounded-lg mt-3 mb-8 ps-3"
+          class="w-full h-[40px] mt-3 mb-8 select-primary"
         >
           <option 
             v-for="category in categories"
@@ -59,7 +59,7 @@
         <select 
           v-model="newTransactionForm.in_budget_id"
           v-if="!budget_id"
-          class="border w-full h-[40px] rounded-lg mt-3 mb-8 ps-3"
+          class=" w-full h-[40px] mt-3 mb-8 select-primary"
           name="amount"
         >
           <option 

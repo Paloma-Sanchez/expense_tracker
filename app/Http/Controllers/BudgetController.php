@@ -120,8 +120,13 @@ class BudgetController extends Controller
      */
     public function update(UpdateBudgetRequest $request, Budget $budget)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'budget_amount' => 'required|numeric|decimal:0,2|max:1000000',
+        ]);
+
         $budget->update(
-            $request->all()
+            $validated
         );
 
         return redirect()->route('budget.show', $budget, 303);

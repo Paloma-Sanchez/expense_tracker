@@ -90,6 +90,7 @@
     :categories="categories"
     :budget-id="budget.id"
     :filters="filters"
+    :disabled="filtersDisabled"
   />
 
   <!-- Transactions -->
@@ -122,17 +123,19 @@
 <budget-modify-modal
   v-if="activeModal === 'changeName'"
   @close-modal="resetModal"
-  @change-request="handleNameChange"
+  :budget-amount="budget.budget_amount"
+  :budget-id="budget.id"
   input-label="New budget name"
-  input-name="budgetName"
+  input-name="name"
 />
 
 <budget-modify-modal
   v-if="activeModal === 'changeAmount'"
   @close-modal="resetModal"
-  @change-request="handleAmountChange"
+  :name="budget.name"
+  :budget-id="budget.id"
   input-label="New budget amount"
-  input-name="budgetAmount"
+  input-name="budget_amount"
 />
 
 <!-- alert -->
@@ -207,6 +210,10 @@ const budgetLeft = computed(() => {
   return Number.parseFloat((Number(props.budget.budget_amount) + props.transactionsTotal)).toFixed(2);
 });
 
+const filtersDisabled = computed(() => {
+  return props.transactions.data.length === 0
+})
+
 //watch
 watch(flash, (newFlash) => {
   if(newFlash){
@@ -217,28 +224,6 @@ watch(flash, (newFlash) => {
 //helpers
 const handleDeleteBudget = () => {
   router.delete(`/budget/${props.budget.id}`)
-}
-
-const handleNameChange = (newValue) => {
-  const { created_at, updated_at, ...newBudget } = props.budget;
-  newBudget.name = newValue;
-
-  router.put(`/budget/${props.budget.id}`, newBudget, {
-    onError: (errors) => {
-      console.error(errors);
-    }
-  });
-
-  resetModal()
-}
-
-const handleAmountChange = (newValue) => {
-  const payload = {
-    budget_amount : newValue
-  }
-  
-  router.put(`/budget/${props.budget.id}`, payload)
-  resetModal()
 }
 
 const makeModalVisible = (modalName) => {
