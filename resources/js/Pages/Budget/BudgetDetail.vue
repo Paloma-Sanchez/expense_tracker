@@ -110,7 +110,6 @@
   />
 </div>
 
-
 <!-- modals -->
  <transaction-add-modal
   v-if="activeModal === 'AddTransaction'"

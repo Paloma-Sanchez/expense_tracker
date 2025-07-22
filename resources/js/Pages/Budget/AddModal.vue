@@ -12,12 +12,14 @@
 
       <common-input
         v-model="newBudgetForm.name"
+        :error="newBudgetForm.errors.name"
         name="name"
         label="Budget name"
         focused
       />
       <common-input
-        v-model="newBudgetForm.amount"
+        v-model="newBudgetForm.budget_amount"
+        :error="newBudgetForm.errors.budget_amount"
         name="amount"
         label="Amount"
         type="number"
@@ -45,22 +47,27 @@
 
 
 <script setup>
-// vue imports
-import { reactive } from 'vue';
-
 //inertia
-import { router } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 //components
 import CommonButton from '../Common/Button.vue';
 import CommonInput from '../Common/Input.vue';
 import CommonModalContainer from '../Common/ModalContainer.vue'; 
 
-const newBudgetForm = reactive({
-  name: '',
-  budget_amount: 0,
-  by_user_id: 1
+const props = defineProps({
+  userId:{
+    type: Number,
+    required:true
+  }
+})
+
+const newBudgetForm = useForm({
+  name: null,
+  budget_amount: null,
+  by_user_id: props.userId ?? null
 }); 
+
 
 //emits
 const emit = defineEmits(['closeModal'])
@@ -71,8 +78,9 @@ const handleCancel = () => {
 }
 
 const handleAddBudget = () => {
-  router.post('/budget', newBudgetForm)
-  emit('closeModal')
+  newBudgetForm.post('/budget',{
+    onSuccess:(() => emit('closeModal'))
+  })
 }
 
 

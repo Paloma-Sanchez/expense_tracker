@@ -51,9 +51,11 @@
       />
     </div>
 
+    <!-- Paginationg -->
     <common-pagination
       :links="transactions.links"
       :current-page="transactions.current_page"
+      :last-page="transactions.last_page"
     />
   </div>
 </div>
@@ -62,6 +64,7 @@
  <budget-add-modal
   v-if="openModal === 'AddBudget'"
   @close-modal="resetModal"
+  :user-id="user.id"
  />
 
  <transaction-add-modal

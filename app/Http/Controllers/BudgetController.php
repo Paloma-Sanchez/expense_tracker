@@ -58,9 +58,17 @@ class BudgetController extends Controller
     public function store(StoreBudgetRequest $request)
     {
        // dd($request->all());
-       Budget::create($request->all()); 
+       $validated = $request->validate([
+            'name' => 'required|max:100|string',
+            'budget_amount' => 'required|max:1000000|decimal:0,2|numeric',
+            'by_user_id' => 'required|exists:users,id'
+       ]);
 
-       return redirect()->route('tracker');
+       $budget = Budget::create($validated); 
+
+       return redirect()
+           ->back()
+           ->with('success', 'Budget created  ' . $budget->id);
     }
 
     /**
